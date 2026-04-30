@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Florian & Camille — Nos Fiançailles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────── */
+    :root {
+      --bg:        #eef6ee;
+      --bg2:       #e0efe0;
+      --surface:   #f7fbf7;
+      --green-100: #d4ebd4;
+      --green-300: #8fbe8f;
+      --green-500: #5a9a6a;
+      --green-700: #2e6644;
+      --green-900: #1a3d2a;
+      --text:      #1f3326;
+      --muted:     #6b8c74;
+      --border:    rgba(90,154,106,0.25);
+      --shadow:    0 8px 40px rgba(30,80,50,0.10);
+      --shadow-sm: 0 2px 12px rgba(30,80,50,0.08);
+      --radius:    18px;
+      --radius-sm: 10px;
+      --serif:     'Cormorant Garamond', Georgia, serif;
+      --sans:      'Jost', sans-serif;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── BACKGROUND DECORATION ─────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 15% 10%, rgba(180,220,180,0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 80%, rgba(150,200,160,0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(200,235,200,0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body > * { position: relative; z-index: 1; }
+
+    /* ─── HEADER ─────────────────────────────────────────── */
+    header {
+      text-align: center;
+      padding: clamp(40px, 8vw, 90px) 24px clamp(24px, 5vw, 50px);
+    }
+
+    .sparkles {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 18px;
+      animation: floatUp 1.2s ease both;
+    }
+    .sparkles span {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: var(--green-500);
+      clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+      opacity: 0.7;
+    }
+    .sparkles span:nth-child(1) { transform: scale(0.7); opacity: 0.4; animation: twinkle 3s 0.2s ease-in-out infinite; }
+    .sparkles span:nth-child(2) { transform: scale(1.2); animation: twinkle 3s 0.8s ease-in-out infinite; }
+    .sparkles span:nth-child(3) { transform: scale(0.8); opacity: 0.5; animation: twinkle 3s 0.4s ease-in-out infinite; }
+
+    .title-names {
+      font-family: var(--serif);
+      font-size: clamp(48px, 10vw, 96px);
+      font-weight: 300;
+      color: var(--green-900);
+      letter-spacing: -0.5px;
+      line-height: 1.05;
+      animation: floatUp 1s 0.1s ease both;
+    }
+    .title-names .amp {
+      color: var(--green-500);
+      font-style: italic;
+      font-weight: 400;
+      padding: 0 8px;
+    }
+
+    .subtitle {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 10px;
+      animation: floatUp 1s 0.2s ease both;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin: 28px auto 0;
+      max-width: 320px;
+      animation: floatUp 1s 0.3s ease both;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--green-300));
+    }
+    .divider::after {
+      background: linear-gradient(to left, transparent, var(--green-300));
+    }
+    .divider-icon { font-size: 20px; }
+
+    /* ─── MAIN LAYOUT ────────────────────────────────────── */
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ─── CARD ───────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: clamp(28px, 5vw, 48px);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.9);
+      animation: floatUp 0.8s 0.4s ease both;
+    }
+
+    .card-title {
+      font-family: var(--serif);
+      font-size: clamp(26px, 5vw, 36px);
+      font-weight: 400;
+      color: var(--green-900);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .card-desc {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 300;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    /* ─── FORM ELEMENTS ──────────────────────────────────── */
+    .field { margin-bottom: 22px; }
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--green-700);
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    .input-name {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 50px;
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--text);
+      background: white;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .input-name::placeholder { color: #b0c8b5; }
+    .input-name:focus {
+      border-color: var(--green-500);
+      box-shadow: 0 0 0 4px rgba(90,154,106,0.12);
+    }
+
+    /* ─── UPLOAD ZONE ────────────────────────────────────── */
+    .upload-zone {
+      position: relative;
+      border: 2px dashed var(--green-300);
+      border-radius: var(--radius-sm);
+      background: rgba(212,235,212,0.18);
+      padding: 36px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--green-500);
+      background: rgba(212,235,212,0.35);
+    }
+    .upload-zone input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .upload-icon { font-size: 36px; margin-bottom: 10px; display: block; }
+    .upload-zone h3 {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--green-700);
+      margin-bottom: 4px;
+    }
+    .upload-zone p {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── PREVIEW THUMBNAILS ─────────────────────────────── */
+    #preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .preview-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .preview-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .preview-item .remove-btn {
+      position: absolute;
+      top: 4px; right: 4px;
+      width: 20px; height: 20px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    /* ─── SUBMIT BUTTON ──────────────────────────────────── */
+    .btn-send {
+      width: 100%;
+      padding: 17px 24px;
+      background: linear-gradient(135deg, var(--green-500), var(--green-700));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 6px 24px rgba(46,102,68,0.35);
+      margin-top: 8px;
+    }
+    .btn-send:hover:not(:disabled) {
+      opacity: 0.92;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(46,102,68,0.4);
+    }
+    .btn-send:active:not(:disabled) { transform: translateY(0); }
+    .btn-send:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    /* ─── PROGRESS BAR ───────────────────────────────────── */
+    .progress-wrap {
+      margin-top: 14px;
+      display: none;
+    }
+    .progress-wrap.visible { display: block; }
+    .progress-bar-bg {
+      height: 6px;
+      background: var(--green-100);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green-300), var(--green-500));
+      border-radius: 99px;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    .progress-text {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ─── TOAST ──────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: var(--green-700);
+      color: white;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 400;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      z-index: 1000;
+      white-space: nowrap;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+    #toast.error { background: #c0392b; }
+
+    /* ─── GALLERY SECTION ────────────────────────────────── */
+    .gallery-section {
+      animation: floatUp 0.8s 0.6s ease both;
+    }
+    .gallery-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .gallery-title {
+      font-family: var(--serif);
+      font-size: clamp(24px, 4vw, 34px);
+      font-weight: 400;
+      color: var(--green-900);
+    }
+    .gallery-count {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ─── PHOTO GRID ─────────────────────────────────────── */
+    #gallery-grid {
+      columns: 2;
+      column-gap: 12px;
+      gap: 12px;
+    }
+    @media (min-width: 500px) { #gallery-grid { columns: 3; } }
+    @media (min-width: 700px) { #gallery-grid { columns: 4; } }
+
+    .photo-card {
+      break-inside: avoid;
+      margin-bottom: 12px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 1.5px solid rgba(255,255,255,0.8);
+    }
+    .photo-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 16px 40px rgba(30,80,50,0.18);
+    }
+    .photo-card img {
+      width: 100%;
+      display: block;
+      background: var(--green-100);
+    }
+    .photo-card .photo-author {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(20,50,30,0.65));
+      color: white;
+      font-size: 12px;
+      font-weight: 400;
+      padding: 20px 10px 8px;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .photo-card:hover .photo-author { opacity: 1; }
+
+    /* ─── EMPTY STATE ────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--muted);
+    }
+    .empty-state .empty-icon { font-size: 48px; margin-bottom: 14px; opacity: 0.5; }
+    .empty-state p { font-size: 15px; font-weight: 300; }
+
+    /* ─── LOADING SKELETON ───────────────────────────────── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--green-100) 25%, var(--bg2) 50%, var(--green-100) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 8px;
+    }
+    .skel-card { break-inside: avoid; margin-bottom: 12px; }
+
+    /* ─── LIGHTBOX (Refondue avec navigation) ──────────────── */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,25,15,0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      backdrop-filter: blur(6px);
+    }
+    #lightbox.open { opacity: 1; pointer-events: all; }
+    #lightbox img {
+      max-width: min(90vw, 900px);
+      max-height: 85vh;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+      transform: scale(0.95);
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #lightbox.open img { transform: scale(1); }
+    .lb-close {
+      position: absolute;
+      top: 20px; right: 24px;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      border: none;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .lb-close:hover { background: rgba(255,255,255,0.28); }
+    
+    /* Nouvelles flèches de navigation intégrées au design */
+    .lb-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.15);
+      color: white;
+      border: none;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lb-nav:hover { background: rgba(255,255,255,0.28); }
+    .lb-nav:active { transform: translateY(-50%) scale(0.95); }
+    .lb-prev { left: 24px; }
+    .lb-next { right: 24px; }
+
+    .lb-author {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.75);
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      .lb-prev { left: 10px; width: 40px; height: 40px; }
+      .lb-next { right: 10px; width: 40px; height: 40px; }
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 24px 0 40px;
+      font-size: 12px;
+      color: var(--muted);
+      opacity: 0.7;
+      font-weight: 300;
+    }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────── */
+    @keyframes floatUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.4; transform: scale(0.8) rotate(0deg); }
+      50%       { opacity: 1;   transform: scale(1.2) rotate(20deg); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ───────────────────────────────────────── -->
+  <header>
+    <div class="sparkles">
+      <span></span><span></span><span></span>
+    </div>
+    <h1 class="title-names">
+      Florian <span class="amp">&amp;</span> Camille
+    </h1>
+    <p class="subtitle">Nos Fiançailles</p>
+    <div class="divider">
+      <span class="divider-icon">🌿</span>
+    </div>
+  </header>
+
+  <!-- ── MAIN ─────────────────────────────────────────── -->
+  <main>
+
+    <!-- Upload Card -->
+    <div class="card">
+      <h2 class="card-title">📸 Partagez vos souvenirs</h2>
+      <p class="card-desc">Immortalisez ce moment magique en ajoutant<br>vos plus belles photos</p>
+
+      <div class="field">
+        <label for="uploader-name">Votre prénom 🌸</label>
+        <input
+          type="text"
+          id="uploader-name"
+          class="input-name"
+          placeholder="Ex : Sophie, Marc…"
+          autocomplete="given-name"
+          maxlength="40"
+        />
+      </div>
+
+      <div class="field">
+        <label>Vos photos 🌿</label>
+        <div class="upload-zone" id="upload-zone">
+          <input
+            type="file"
+            id="file-input"
+            accept="image/jpeg,image/png,image/webp,image/heic"
+            multiple
+          />
+          <span class="upload-icon">📥</span>
+          <h3>Cliquez ou glissez vos photos ici</h3>
+          <p>JPG, PNG, WEBP — jusqu'à 10 Mo par photo</p>
+        </div>
+        <div id="preview-grid"></div>
+      </div>
+
+      <button class="btn-send" id="send-btn" onclick="uploadPhotos()">
+        ✨ Envoyer mes photos
+      </button>
+
+      <div class="progress-wrap" id="progress-wrap">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+        <p class="progress-text" id="progress-text">Envoi en cours…</p>
+      </div>
+    </div>
+
+    <!-- Gallery -->
+    <div class="gallery-section">
+      <div class="gallery-header">
+        <h2 class="gallery-title">🌷 La galerie</h2>
+        <span class="gallery-count" id="gallery-count"></span>
+      </div>
+      <div id="gallery-grid"></div>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ────────────────────────────────────────── -->
+  <footer>
+    Avec amour · Florian &amp; Camille 🌿
+  </footer>
+
+  <!-- ── LIGHTBOX ──────────────────────────────────────── -->
+  <div id="lightbox" onclick="closeLightbox(event)">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <button class="lb-nav lb-prev" onclick="navigate(-1)">‹</button>
+    <img id="lb-img" src="" alt="Photo agrandie" />
+    <button class="lb-nav lb-next" onclick="navigate(1)">›</button>
+    <span class="lb-author" id="lb-author"></span>
+  </div>
+
+  <!-- ── TOAST ─────────────────────────────────────────── -->
+  <div id="toast"></div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════
+    //  🔧 CONFIGURATION
+    // ═══════════════════════════════════════════════════════
+    // 1. L'URL pour L'ENVOI des photos (Apps Script)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysROLGos5fr4TKz5rVW-aIkbjd0fZ_tZ4Z0Bo8CfykeZzsm_545A9uSO_gVQFvbS0Z/exec";
+    
+    // 2. Configuration pour LA LECTURE des photos (API Google Drive)
+    const FOLDER_ID = "VOTRE_ID_DE_DOSSIER_ICI";
+    const API_KEY = "VOTRE_CLE_API_ICI";
+
+    // ───────────────────────────────────────────────────────
+    //  Variables globales
+    // ───────────────────────────────────────────────────────
+    let selectedFiles = [];
+    let allPhotos = [];
+    let currentIndex = 0;
+
+    // ───────────────────────────────────────────────────────
+    //  Upload Zone — drag & drop + prévisualisation
+    // ───────────────────────────────────────────────────────
+    const zone   = document.getElementById("upload-zone");
+    const input  = document.getElementById("file-input");
+    const grid   = document.getElementById("preview-grid");
+
+    zone.addEventListener("dragover",  e => { e.preventDefault(); zone.classList.add("dragover"); });
+    zone.addEventListener("dragleave", () => zone.classList.remove("dragover"));
+    zone.addEventListener("drop", e => {
+      e.preventDefault();
+      zone.classList.remove("dragover");
+      addFiles([...e.dataTransfer.files]);
+    });
+
+    input.addEventListener("change", () => {
+      addFiles([...input.files]);
+      input.value = "";
+    });
+
+    function addFiles(files) {
+      files.forEach(file => {
+        if (!file.type.startsWith("image/")) return;
+        if (file.size > 10 * 1024 * 1024) { showToast(`${file.name} dépasse 10 Mo`, "error"); return; }
+        selectedFiles.push(file);
+
+        const wrap = document.createElement("div");
+        wrap.className = "preview-item";
+        wrap.dataset.index = selectedFiles.length - 1;
+
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name;
+
+        const btn = document.createElement("button");
+        btn.className = "remove-btn";
+        btn.textContent = "✕";
+        btn.onclick = () => {
+          selectedFiles.splice(+wrap.dataset.index, 1);
+          wrap.remove();
+          [...grid.querySelectorAll(".preview-item")].forEach((el, i) => el.dataset.index = i);
+        };
+
+        wrap.appendChild(img);
+        wrap.appendChild(btn);
+        grid.appendChild(wrap);
+      });
+    }
+
+    // ───────────────────────────────────────────────────────
+    //  Upload — envoi séquentiel vers Apps Script
+    // ───────────────────────────────────────────────────────
+    async function uploadPhotos() {
+      const name = document.getElementById("uploader-name").value.trim();
+      if (!name) { showToast("Merci d'indiquer votre prénom 🌸", "error"); return; }
+      if (selectedFiles.length === 0) { showToast("Sélectionnez au moins une photo 📸", "error"); return; }
+
+      const btn  = document.getElementById("send-btn");
+      const wrap = document.getElementById("progress-wrap");
+      const bar  = document.getElementById("progress-bar");
+      const txt  = document.getElementById("progress-text");
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Envoi en cours…';
+      wrap.classList.add("visible");
+
+      let done = 0;
+      const total = selectedFiles.length;
+
+      for (const file of selectedFiles) {
+        try {
+          const b64 = await toBase64(file);
+          const payload = {
+            imageData:    b64,
+            fileName:     file.name,
+            uploaderName: name,
+            mimeType:     file.type
+          };
+
+          const res = await fetch(SCRIPT_URL, {
+            method:  "POST",
+            redirect: "follow",
+            body:    JSON.stringify(payload)
+          });
+
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          await res.json().catch(() => null);
+
+          done++;
+          const pct = Math.round((done / total) * 100);
+          bar.style.width = pct + "%";
+          txt.textContent = `Photo ${done} / ${total} envoyée…`;
+
+        } catch (err) {
+          console.error("Erreur upload :", err);
+          showToast(`Erreur pour "${file.name}" : ${err.message}`, "error");
+        }
+      }
+
+      selectedFiles = [];
+      grid.innerHTML = "";
+      document.getElementById("uploader-name").value = "";
+      setTimeout(() => {
+        wrap.classList.remove("visible");
+        bar.style.width = "0%";
+      }, 1200);
+      btn.disabled = false;
+      btn.innerHTML = "✨ Envoyer mes photos";
+
+      if (done > 0) {
+        showToast(`🎉 ${done} photo${done > 1 ? "s" : ""} envoyée${done > 1 ? "s" : ""} avec succès !`);
+        setTimeout(loadGallery, 2000); 
+      }
+    }
+
+    function toBase64(file) {
+      return new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload  = () => res(r.result);
+        r.onerror = () => rej(new Error("Lecture impossible"));
+        r.readAsDataURL(file);
+      });
+    }
+
+    // ───────────────────────────────────────────────────────
+    //  Galerie — Intégration de l'API Google Drive directe
+    // ───────────────────────────────────────────────────────
+    async function loadGallery() {
+      const galGrid = document.getElementById("gallery-grid");
+      const count   = document.getElementById("gallery-count");
+
+      if (!FOLDER_ID || FOLDER_ID === "VOTRE_ID_DE_DOSSIER_ICI" || !API_KEY || API_KEY === "VOTRE_CLE_API_ICI") {
+        galGrid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1">
+            <div class="empty-icon">⚠️</div>
+            <p>Veuillez configurer FOLDER_ID et API_KEY dans le code source.</p>
+          </div>`;
+        return;
+      }
+
+      galGrid.innerHTML = Array.from({ length: 8 }, (_, i) => `
+        <div class="skel-card">
+          <div class="skeleton" style="aspect-ratio:${i % 3 === 0 ? '3/4' : i % 2 === 0 ? '4/3' : '1/1'};"></div>
+        </div>
+      `).join("");
+
+      try {
+        let pageToken = '';
+        allPhotos = [];
+
+        do {
+          const pageParam = pageToken ? `&pageToken=${pageToken}` : '';
+          const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&key=${API_KEY}&fields=nextPageToken,files(id,name)&pageSize=100${pageParam}`;
+          
+          const res = await fetch(url);
+          const data = await res.json();
+
+          if (data.error) throw new Error(data.error.message);
+
+          allPhotos.push(...data.files);
+          pageToken = data.nextPageToken || '';
+        } while (pageToken);
+
+        galGrid.innerHTML = "";
+
+        if (allPhotos.length === 0) {
+          galGrid.innerHTML = `
+            <div class="empty-state" style="grid-column:1/-1">
+              <div class="empty-icon">📷</div>
+              <p>Soyez les premiers à partager vos photos !</p>
+            </div>`;
+          count.textContent = "";
+          return;
+        }
+
+        count.textContent = `${allPhotos.length} souvenir${allPhotos.length > 1 ? "s" : ""}`;
+
+        allPhotos.forEach((file, index) => {
+          // Si le fichier s'appelle "Marc_photo.jpg", on extrait "Marc"
+          const author = file.name.includes('_') ? file.name.split('_')[0] : "Invité";
+          const thumbUrl = `https://drive.google.com/thumbnail?id=${file.id}&sz=w800`;
+
+          const card = document.createElement("div");
+          card.className = "photo-card";
+          card.innerHTML = `
+            <img src="${thumbUrl}" loading="lazy" alt="Photo de ${author}" />
+            <div class="photo-author">📸 ${author}</div>
+          `;
+          
+          card.onclick = () => openLightbox(index);
+          galGrid.appendChild(card);
+        });
+
+      } catch (err) {
+        galGrid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1">
+            <div class="empty-icon">🌿</div>
+            <p>Impossible de charger la galerie.<br><small style="opacity:.7">${err.message}</small></p>
+          </div>`;
+        console.error("Galerie Drive API :", err);
+      }
+    }
+
+    // ───────────────────────────────────────────────────────
+    //  Lightbox avec Navigation (Précédent / Suivant)
+    // ───────────────────────────────────────────────────────
+    function openLightbox(index) {
+      if (allPhotos.length === 0) return;
+      currentIndex = index;
+      const file = allPhotos[currentIndex];
+      const author = file.name.includes('_') ? file.name.split('_')[0] : "Invité";
+      
+      document.getElementById("lb-img").src = `https://drive.google.com/uc?export=view&id=${file.id}`;
+      document.getElementById("lb-author").textContent = `📸 ${author} — ${currentIndex + 1} / ${allPhotos.length}`;
+      document.getElementById("lightbox").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function navigate(dir) {
+      if (allPhotos.length === 0) return;
+      // Boucle à l'infini : passe de la dernière à la première et inversement
+      currentIndex = (currentIndex + dir + allPhotos.length) % allPhotos.length;
+      openLightbox(currentIndex);
+    }
+
+    function closeLightbox(e) {
+      if (e && e.target !== document.getElementById("lightbox") && !e.target.classList.contains("lb-close")) return;
+      document.getElementById("lightbox").classList.remove("open");
+      document.getElementById("lb-img").src = "";
+      document.body.style.overflow = "";
+    }
+
+    // Navigation au clavier
+    document.addEventListener("keydown", e => { 
+      const lb = document.getElementById("lightbox");
+      if (!lb.classList.contains("open")) return;
+      
+      if (e.key === "Escape") closeLightbox({ target: lb });
+      if (e.key === "ArrowLeft") navigate(-1);
+      if (e.key === "ArrowRight") navigate(1);
+    });
+
+    // ───────────────────────────────────────────────────────
+    //  Toast notifications
+    // ───────────────────────────────────────────────────────
+    let toastTimer;
+    function showToast(msg, type = "success") {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.className   = type === "error" ? "error show" : "show";
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.className = type === "error" ? "error" : "", 3800);
+    }
+
+    // ───────────────────────────────────────────────────────
+    //  Init
+    // ───────────────────────────────────────────────────────
+    loadGallery();
+  </script>
+</body>
+</html>
