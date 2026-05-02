@@ -79,6 +79,20 @@
     .sparkles span:nth-child(2) { transform: scale(1.2); animation: twinkle 3s 0.8s ease-in-out infinite; }
     .sparkles span:nth-child(3) { transform: scale(0.8); opacity: 0.5; animation: twinkle 3s 0.4s ease-in-out infinite; }
 
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+
+    @keyframes floatUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     .title-names {
       font-family: var(--serif);
       font-size: clamp(48px, 10vw, 96px);
@@ -335,7 +349,7 @@
     #toast.show { transform: translateX(-50%) translateY(0); }
     #toast.error { background: #c0392b; }
 
-    /* ─── GALLERY SECTION (Mélange design 1 & structure 2) ─── */
+    /* ─── GALLERY SECTION ────────────────────────────────── */
     .gallery-section {
       animation: floatUp 0.8s 0.6s ease both;
     }
@@ -357,7 +371,6 @@
       font-weight: 300;
     }
 
-    /* Grille de type Site 2 (Carrés) */
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -366,10 +379,10 @@
 
     .photo-item {
       position: relative;
-      aspect-ratio: 1; /* Force le format carré du site 2 */
+      aspect-ratio: 1;
       overflow: hidden;
       cursor: pointer;
-      border-radius: var(--radius-sm); /* Garde la douceur du site 1 */
+      border-radius: var(--radius-sm);
       border: 1.5px solid rgba(255,255,255,0.8);
       box-shadow: var(--shadow-sm);
       animation: fadeIn 0.5s ease both;
@@ -439,12 +452,12 @@
     .empty-state .empty-icon { font-size: 48px; margin-bottom: 14px; opacity: 0.5; }
     .empty-state p { font-size: 15px; font-weight: 300; }
 
-    /* ─── LIGHTBOX (Site 2 logic + Site 1 style) ─────────── */
+    /* ─── LIGHTBOX ───────────────────────────────────────── */
     .lightbox {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(10,25,15,0.92); /* Teinte verte très sombre du Site 1 */
+      background: rgba(10,25,15,0.92);
       z-index: 1000;
       align-items: center;
       justify-content: center;
@@ -456,7 +469,7 @@
 
     .lightbox img {
       max-width: 90vw;
-      max-height: 85vh;
+      max-height: 80vh;
       object-fit: contain;
       border-radius: 8px;
       box-shadow: 0 24px 80px rgba(0,0,0,0.5);
@@ -508,12 +521,38 @@
 
     .lb-caption {
       position: absolute;
-      bottom: 24px;
+      bottom: 60px;
       left: 50%;
       transform: translateX(-50%);
       font-size: 13px;
       letter-spacing: 0.05em;
       color: rgba(255,255,255,0.8);
+      white-space: nowrap;
+    }
+
+    /* Bouton téléchargement dans la lightbox */
+    .lb-download {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.18);
+      border: 1.5px solid rgba(255,255,255,0.4);
+      color: white;
+      padding: 9px 24px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-family: var(--sans);
+      font-weight: 400;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(4px);
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .lb-download:hover {
+      background: rgba(255,255,255,0.28);
+      transform: translateX(-50%) translateY(-2px);
     }
 
     @media (max-width: 600px) {
@@ -521,6 +560,8 @@
       .lb-prev { left: 10px; width: 40px; height: 40px; }
       .lb-next { right: 10px; width: 40px; height: 40px; }
       .lb-close { top: 15px; right: 15px; width: 40px; height: 40px; }
+      .lb-caption { font-size: 11px; bottom: 58px; }
+      .lb-download { font-size: 12px; padding: 8px 18px; bottom: 18px; }
     }
 
     /* ─── FOOTER ─────────────────────────────────────────── */
@@ -586,7 +627,7 @@
       </div>
     </div>
 
-    <!-- Gallery (Structure du Site 2) -->
+    <!-- Gallery -->
     <div class="gallery-section">
       <div class="gallery-header">
         <h2 class="gallery-title">🌷 La galerie</h2>
@@ -610,13 +651,14 @@
     Avec amour · Camille &amp; Florian 🌿
   </footer>
 
-  <!-- ── LIGHTBOX (Navigation de Site 2) ───────────────── -->
+  <!-- ── LIGHTBOX ───────────────────────────────────────── -->
   <div class="lightbox" id="lightbox">
     <button class="lb-close" onclick="closeLightbox()">✕</button>
     <button class="lb-nav lb-prev" onclick="navigate(-1)">‹</button>
     <img id="lbImg" src="" alt="" />
     <button class="lb-nav lb-next" onclick="navigate(1)">›</button>
     <div class="lb-caption" id="lbCaption"></div>
+    <a id="lbDownload" class="lb-download" href="#" download target="_blank">⬇ Télécharger</a>
   </div>
 
   <!-- ── TOAST ─────────────────────────────────────────── -->
@@ -624,31 +666,25 @@
 
   <script>
     // ═══════════════════════════════════════════════════════
-    //  🔧 CONFIGURATION DE LA GALERIE ET DE L'UPLOAD
+    //  🔧 CONFIGURATION
     // ═══════════════════════════════════════════════════════
-    
-    // 1. Clé API et Dossier (POUR LIRE LA GALERIE)
-    // -> C'est cette partie qui charge les photos directement depuis Google Drive.
-    const FOLDER_ID = "1l2E5TF0Q-3UxmFqxa21vt0xf-EFrfrr9";
-    const API_KEY   = "AIzaSyCAvIyVcMQEBN3MKQPpaMFg_pxYjT-Y4C8";
-
-    // 2. Script d'Upload (POUR ENVOYER DES PHOTOS)
-    // -> Obligatoire pour autoriser un visiteur inconnu à déposer une photo dans votre Drive.
+    const FOLDER_ID  = "1l2E5TF0Q-3UxmFqxa21vt0xf-EFrfrr9";
+    const API_KEY    = "AIzaSyCAvIyVcMQEBN3MKQPpaMFg_pxYjT-Y4C8";
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysROLGos5fr4TKz5rVW-aIkbjd0fZ_tZ4Z0Bo8CfykeZzsm_545A9uSO_gVQFvbS0Z/exec";
 
     // ───────────────────────────────────────────────────────
     //  Variables globales
     // ───────────────────────────────────────────────────────
     let selectedFiles = [];
-    let allPhotos = [];
-    let currentIndex = 0;
+    let allPhotos     = [];
+    let currentIndex  = 0;
 
     // ───────────────────────────────────────────────────────
     //  Upload Zone — drag & drop + prévisualisation
     // ───────────────────────────────────────────────────────
-    const zone   = document.getElementById("upload-zone");
-    const input  = document.getElementById("file-input");
-    const grid   = document.getElementById("preview-grid");
+    const zone  = document.getElementById("upload-zone");
+    const input = document.getElementById("file-input");
+    const grid  = document.getElementById("preview-grid");
 
     zone.addEventListener("dragover",  e => { e.preventDefault(); zone.classList.add("dragover"); });
     zone.addEventListener("dragleave", () => zone.classList.remove("dragover"));
@@ -706,7 +742,7 @@
       const txt  = document.getElementById("progress-text");
 
       btn.disabled = true;
-      btn.innerHTML = '<span class="spinner" style="border-top-color: white;"></span> Envoi en cours…';
+      btn.innerHTML = 'Envoi en cours…';
       wrap.classList.add("visible");
 
       let done = 0;
@@ -754,8 +790,7 @@
 
       if (done > 0) {
         showToast(`🎉 ${done} photo${done > 1 ? "s" : ""} envoyée${done > 1 ? "s" : ""} avec succès !`);
-        // On recharge la galerie Google API après l'envoi
-        setTimeout(loadPhotos, 2000); 
+        setTimeout(loadPhotos, 2000);
       }
     }
 
@@ -769,7 +804,7 @@
     }
 
     // ───────────────────────────────────────────────────────
-    //  Galerie — Logique API Google Drive pure (Site 2)
+    //  Galerie — API Google Drive
     // ───────────────────────────────────────────────────────
     async function loadPhotos() {
       const gallery  = document.getElementById('gallery');
@@ -778,7 +813,6 @@
       const emptyTxt = document.getElementById('emptyText');
       const countEl  = document.getElementById('gallery-count');
 
-      // Vérification des clés
       if (!FOLDER_ID || FOLDER_ID === "VOTRE_ID_DE_DOSSIER_ICI" || !API_KEY || API_KEY === "VOTRE_CLE_API_ICI") {
         emptyTxt.innerHTML = "Configuration requise : <br>Veuillez insérer votre FOLDER_ID et API_KEY dans le code HTML.";
         emptySt.classList.add('visible');
@@ -795,12 +829,11 @@
         let pageToken = '';
         let total = 0;
 
-        // Boucle pour récupérer toutes les pages de photos depuis l'API Google
         do {
           const pageParam = pageToken ? `&pageToken=${pageToken}` : '';
           const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&key=${API_KEY}&fields=nextPageToken,files(id,name)&pageSize=100${pageParam}`;
           
-          const res = await fetch(url);
+          const res  = await fetch(url);
           const data = await res.json();
 
           if (data.error) throw new Error(data.error.message);
@@ -833,13 +866,12 @@
     }
 
     function addPhotoToGrid(file, index) {
-      // Nettoyage du nom (ex: "Sophie_image.jpg" -> "Sophie")
       const authorName = file.name.includes('_') ? file.name.split('_')[0] : "Invité";
       const thumb = `https://drive.google.com/thumbnail?id=${file.id}&sz=w400`;
       
       const item = document.createElement('div');
       item.className = 'photo-item';
-      item.style.animationDelay = `${(index % 20) * 40}ms`; // Effet d'apparition en cascade
+      item.style.animationDelay = `${(index % 20) * 40}ms`;
       
       item.innerHTML = `
         <img src="${thumb}" alt="Photo de ${authorName}" loading="lazy" />
@@ -852,15 +884,20 @@
     }
 
     // ───────────────────────────────────────────────────────
-    //  Lightbox & Navigation (Logique Site 2)
+    //  Lightbox & Navigation
     // ───────────────────────────────────────────────────────
     function openLightbox(index) {
       if (allPhotos.length === 0) return;
       currentIndex = index;
       const file = allPhotos[currentIndex];
       const authorName = file.name.includes('_') ? file.name.split('_')[0] : "Invité";
-      
-      document.getElementById('lbImg').src = `https://drive.google.com/uc?export=view&id=${file.id}`;
+
+      // ✅ URL fiable pour l'affichage plein écran (même système que les miniatures)
+      document.getElementById('lbImg').src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w1600`;
+
+      // ✅ Lien de téléchargement du fichier original
+      document.getElementById('lbDownload').href = `https://drive.google.com/uc?export=download&id=${file.id}`;
+
       document.getElementById('lbCaption').textContent = `📸 ${authorName} — ${currentIndex + 1} / ${allPhotos.length}`;
       document.getElementById('lightbox').classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -874,25 +911,23 @@
 
     function navigate(dir) {
       if (allPhotos.length === 0) return;
-      // Permet de boucler (après la dernière photo, on revient à la première)
       currentIndex = (currentIndex + dir + allPhotos.length) % allPhotos.length;
       openLightbox(currentIndex);
     }
 
     document.getElementById('lightbox').addEventListener('click', function(e) {
-      // Ferme la lightbox si on clique à côté de l'image (sur le fond sombre)
       if (e.target === this) closeLightbox();
     });
 
     document.addEventListener('keydown', e => {
       if (!document.getElementById('lightbox').classList.contains('open')) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') navigate(-1);
-      if (e.key === 'ArrowRight') navigate(1);
+      if (e.key === 'Escape')      closeLightbox();
+      if (e.key === 'ArrowLeft')   navigate(-1);
+      if (e.key === 'ArrowRight')  navigate(1);
     });
 
     // ───────────────────────────────────────────────────────
-    //  Toast notifications & Initialisation
+    //  Toast notifications
     // ───────────────────────────────────────────────────────
     let toastTimer;
     function showToast(msg, type = "success") {
